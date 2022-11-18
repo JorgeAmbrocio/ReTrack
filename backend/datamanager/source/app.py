@@ -10,6 +10,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 import routers.tiendarouter 
 import routers.pisorouter
+import routers.pasillorouter
 
 # FUNCTION TO TEST IF THE API IS WORKING
 @app.route('/test', methods=['GET'])

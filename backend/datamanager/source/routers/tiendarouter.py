@@ -1,12 +1,14 @@
 from __main__ import app
 from flask import Flask, request, jsonify, make_response
+from controllers import tiendacontroller
 
 ##### ROUTING FROM TIENDA
 
 # GET ALL TIENDAS
 @app.route('/tienda', methods=['GET'])
 def get_all_tienda():
-    return jsonify({'message': 'GET ALL TIENDAS'})
+    response = tiendacontroller.get_all_tienda()
+    return jsonify(response)
 
 # GET ONE TIENDA
 @app.route('/tienda/<id>', methods=['GET'])

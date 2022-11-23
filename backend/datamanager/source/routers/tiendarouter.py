@@ -13,19 +13,34 @@ def get_all_tienda():
 # GET ONE TIENDA
 @app.route('/tienda/<id>', methods=['GET'])
 def get_one_tienda(id):
-    return jsonify({'message': 'GET ONE TIENDA'})
+    response = tiendacontroller.get_one_tienda(id)
+    return jsonify(response)
 
 # CREATE ONE TIENDA
 @app.route('/tienda', methods=['POST'])
 def create_tienda():
-    return jsonify({'message': 'CREATE ONE TIENDA'})
+    body = request.get_json()
+    try:
+        response = tiendacontroller.create_tienda(body)
+        return jsonify(response)
+    except Exception as e:
+        return jsonify({'msg': "{}".format(e), 'status': 500})
 
 # UPDATE ONE TIENDA
 @app.route('/tienda/<id>', methods=['PUT'])
 def update_tienda(id):
-    return jsonify({'message': 'UPDATE ONE TIENDA'})
+    body = request.get_json()
+    try:
+        response = tiendacontroller.update_tienda(id, body)
+        return jsonify(response)
+    except Exception as e:
+        return jsonify({'msg': "{}".format(e), 'status': 500})
 
 # DELETE ONE TIENDA
 @app.route('/tienda/<id>', methods=['DELETE'])
 def delete_tienda(id):
-    return jsonify({'message': 'DELETE ONE TIENDA'})
+    try:
+        response = tiendacontroller.delete_tienda(id)
+        return jsonify(response)
+    except Exception as e:
+        return jsonify({'msg': "{}".format(e), 'status': 500})

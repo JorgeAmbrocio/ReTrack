@@ -1,14 +1,14 @@
 from contexts import retrackcontext
 from mysql.connector import Error
 
-# GET ALL TIENDAS
-def get_all_tienda():
+# GET ALL PISOS
+def get_all_piso():
     # create a new connection
     connection = retrackcontext.define_connection()
     cursor = connection.cursor()
 
     query = (
-        "SELECT * FROM Tienda"
+        "SELECT * FROM Piso"
     )
 
     # execute the query
@@ -21,25 +21,25 @@ def get_all_tienda():
         connection.close()
 
         # create a list of dictionaries
-        tiendas = []
+        pisos = []
         for row in result:
-            tienda = dict(zip(headers, row))
-            tiendas.append(tienda)
+            piso = dict(zip(headers, row))
+            pisos.append(piso)
         
-        return {'msg': tiendas, 'status': 200}
+        return {'msg': pisos, 'status': 200}
     except Error as e:
         connection.close()
         print(e)
         return {'msg': "{}".format(e), 'status': 500}
 
-# GET ONE TIENDA
-def get_one_tienda(id):
+# GET ONE PISO
+def get_one_piso(id):
     # create a new connection
     connection = retrackcontext.define_connection()
     cursor = connection.cursor()
 
     query = (
-        "SELECT * FROM Tienda WHERE id = %s"
+        "SELECT * FROM Piso WHERE id = %s"
     )
 
     # execute the query
@@ -52,79 +52,84 @@ def get_one_tienda(id):
         connection.close()
 
         # create a list of dictionaries
-        tiendas = []
+        pisos = []
         for row in result:
-            tienda = dict(zip(headers, row))
-            tiendas.append(tienda)
+            piso = dict(zip(headers, row))
+            pisos.append(piso)
         
-        return {'msg': tiendas, 'status': 200}
+        return {'msg': pisos, 'status': 200}
     except Error as e:
         connection.close()
         print(e)
         return {'msg': "{}".format(e), 'status': 500}
-    
-# CREATE ONE TIENDA
-def create_tienda(body):
 
+# CREATE ONE PISO
+def create_piso(data):
     # create a new connection
     connection = retrackcontext.define_connection()
     cursor = connection.cursor()
 
     query = (
-        "INSERT INTO Tienda (nombre) VALUES (%(nombre)s)"
+        "INSERT INTO Piso (nombre, idTienda) VALUES (%s, %s)"
     )
 
+    # execute the query
     try:
-        cursor.execute(query, body)
+        cursor.execute(query, (data['nombre'], data['idTienda']))
         connection.commit()
+
         cursor.close()
         connection.close()
 
-        return {'msg': 'Tienda creada', 'status': 201}
+        return {'msg': 'Piso creado correctamente', 'status': 200}
     except Error as e:
         connection.close()
         print(e)
         return {'msg': "{}".format(e), 'status': 500}
 
-# UPDATE ONE TIENDA
-def update_tienda(id, body):
+# UPDATE ONE PISO
+def update_piso(id, data):
     # create a new connection
     connection = retrackcontext.define_connection()
     cursor = connection.cursor()
 
     query = (
-        "UPDATE Tienda SET nombre = %s WHERE id = %s"
+        "UPDATE Piso SET nombre = %s,idTienda = %s WHERE id = %s"
     )
 
+    # execute the query
     try:
-        cursor.execute(query, (body.get('nombre'), id))
+        cursor.execute(query, (data['nombre'], data['idTienda'], id))
         connection.commit()
+
         cursor.close()
         connection.close()
 
-        return {'msg': 'Tienda actualizada', 'status': 200}
+        return {'msg': 'Piso actualizado correctamente', 'status': 200}
     except Error as e:
         connection.close()
         print(e)
         return {'msg': "{}".format(e), 'status': 500}
 
-# DELETE ONE TIENDA
-def delete_tienda(id):
+# DELETE ONE PISO
+def delete_piso(id):
     # create a new connection
     connection = retrackcontext.define_connection()
     cursor = connection.cursor()
 
     query = (
-        "DELETE FROM Tienda WHERE id = %s"
+        "DELETE FROM Piso WHERE id = %s"
     )
 
+    # execute the query
     try:
         cursor.execute(query, (id,))
         connection.commit()
+
         cursor.close()
         connection.close()
 
-        return {'msg': 'Tienda eliminada', 'status': 200}
+        return {'msg': 'Piso eliminado correctamente', 'status': 200}
     except Error as e:
         connection.close()
         print(e)

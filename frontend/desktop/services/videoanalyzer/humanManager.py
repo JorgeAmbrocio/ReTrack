@@ -1,6 +1,6 @@
 import math
 
-class HumanMannager:
+class HumanManager:
     def __init__(self):
         self.activeHumans = []
         self.deactiveHumans = []

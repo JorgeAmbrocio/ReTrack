@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from humanManager import HumanManager 
+from humanMannager import HumanMannager 
 
 class VideoAnalyzer:
     def __init__(self):
@@ -9,7 +9,7 @@ class VideoAnalyzer:
         self.kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
         self.estado = 'No se identifica movimiento'
         self.color = (0,0,255)
-        self.hm = HumanManager()
+        self.hm = HumanMannager()
     
     def captureVideo(self):
         self.cap = cv2.VideoCapture('tmpvideo/pasillo_Trim_1.mp4')

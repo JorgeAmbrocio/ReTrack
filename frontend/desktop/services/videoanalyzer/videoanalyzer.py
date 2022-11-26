@@ -1,16 +1,18 @@
 import cv2
 import numpy as np
+from humanManager import HumanManager 
 
 class VideoAnalyzer:
     def __init__(self):
-        self.cap = cv2.VideoCapture('tmpvideo/pasillo.mp4')
+        self.cap = None
         self.fgbg = cv2.createBackgroundSubtractorMOG2()
         self.kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
         self.estado = 'No se identifica movimiento'
         self.color = (0,0,255)
+        self.hm = HumanManager()
     
     def captureVideo(self):
-        self.cap = cv2.VideoCapture('tmpvideo/pasillo.mp4')
+        self.cap = cv2.VideoCapture('tmpvideo/pasillo_Trim_1.mp4')
 
     def applySubtraction(self, frame, gray):
         # get area points
@@ -44,15 +46,23 @@ class VideoAnalyzer:
             # draw rectangle
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             # show text state
-            self.estado = 'Se identifica movimiento'
+            self.estado = 'Se identifica movimiento con #' + str(len(self.hm.activeHumans)) 
             self.color = (0,0,255)
+            # add human
+            humanID = self.hm.addHuman(x, y)
+            # show human id
+            cv2.putText(frame, str(humanID), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        
+        # remove inactive humans
+        self.hm.cleanHumans()
+        
 
     def printFrame(self, frame, fgmask):
         # show text state
         cv2.putText(frame, self.estado, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, self.color, 2)
         # show frames
-        cv2.imshow('frame', frame)
         cv2.imshow('fgmask', fgmask)
+        cv2.imshow('frame', frame)
     
     def analyse(self):
         self.captureVideo()
@@ -78,8 +88,5 @@ class VideoAnalyzer:
             # print frame
             self.printFrame(frame, fgmask)
 
-            if cv2.waitKey(80) & 0xFF == ord('q'):
+            if cv2.waitKey(700) & 0xFF == ord('q'):
                 break
-        
-
-        
